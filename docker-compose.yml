@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  app-db:
+    image: postgres:${VERSION}
+    container_name: app-db-postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+      POSTGRES_DB: cache-app-db
+    restart: unless-stopped
+    networks:
+      - app-db
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD_SHELL", "pg_isready -d app-database -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+    volumes:
+      - app-db:/data
+
+  pg-admin:
+    container_name: pg-admin
+    image: dpage/pgadmin4:7.7
+    environment:
+      PGADMIN_DEFAULT_EMAIL: spr11eee@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: user
+    volumes:
+      - pg-admin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      app-db:
+    restart: unless-stopped
+
+volumes:
+  app-db:
+  pg-admin:
+
+networks:
+  app-db:
