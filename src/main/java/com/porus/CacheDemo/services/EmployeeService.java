@@ -3,7 +3,6 @@ package com.porus.CacheDemo.services;
 import com.porus.CacheDemo.models.Employee;
 import com.porus.CacheDemo.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,7 @@ public class EmployeeService {
     }
 
     @Cacheable(
-            value = "emp", key = "#id", condition = "#id > 3" // Only Caching if id > 3 and others will always be fetched from DB.
+            value = "emp", key = "#id" // Only Caching if id > 3 and others will always be fetched from DB.
     )
     public Employee fetchEmployeeById(Long id) {
         System.out.printf(String.format("======== Searching Employee in DB by %d ============", id));
